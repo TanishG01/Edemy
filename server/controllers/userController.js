@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Stripe from "stripe"
 import Course from "../models/Course.js"
 import User from "../models/User.js"
@@ -66,7 +67,7 @@ export const purchaseCourse = async(req,res) =>{
                 product_data: {
                     name: courseData.courseTitle
                 },
-                unit_amount: Math.floor(newPurchase.amount) * 100
+                unit_amount: Math.floor(newPurchase.amount * 100)
             },
             quantity: 1
         }]
@@ -135,35 +136,87 @@ export const addUserRating = async (req,res)=>{
     const userId = req.auth().userId;
     const {courseId,rating} = req.body;
 
-    if(!courseId || !userId || !rating || rating < 1 || rating > 5){
-        return res.json({success: false, message: 'InValid Details'});
+    if (
+        !courseId ||
+        !userId ||
+        typeof rating !== "number" ||
+        rating < 1 ||
+        rating > 5
+    ) {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid details.",
+        });
+    }
+
+    // Validate MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(courseId)) {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid course ID.",
+        });
     }
 
     try {
+        // Find course
         const course = await Course.findById(courseId);
 
-        if(!course){
-            return res.json({success: false, message: 'Course not found.'});
+        if (!course) {
+            return res.status(404).json({
+                success: false,
+                message: "Course not found.",
+            });
         }
 
+        // Find user
         const user = await User.findById(userId);
 
-        if(!user || !user.enrolledCourses.includes(courseId)){
-            return res.json({success: false, message: 'User has not purchased this course.'});
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found.",
+            });
         }
 
-        const existingRatingIndex = course.courseRatings.findIndex(r => r.userId === userId)
+        // Check if user has purchased the course
+        const hasPurchased = user.enrolledCourses.some(
+            (id) => id.toString() === courseId
+        );
 
-        if(existingRatingIndex > -1){
+        if (!hasPurchased) {
+            return res.status(403).json({
+                success: false,
+                message: "User has not purchased this course.",
+            });
+        }
+
+        // Check if user has already rated the course
+        const existingRatingIndex = course.courseRatings.findIndex(
+            (r) => r.userId.toString() === userId
+        );
+
+        if (existingRatingIndex !== -1) {
             course.courseRatings[existingRatingIndex].rating = rating;
-        } else{
-            course.courseRatings.push({userId,rating});
+        } else {
+            course.courseRatings.push({
+                userId,
+                rating,
+            });
         }
+
         await course.save();
 
-        return res.json({success: true, message: 'Rating added'})
+        return res.status(200).json({
+            success: true,
+            message: "Rating added successfully.",
+        });
 
     } catch (error) {
-        return res.json({success: false, message: error.message});
+        console.error(error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error.",
+        });
     }
 }

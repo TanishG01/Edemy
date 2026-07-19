@@ -13,23 +13,40 @@ export const getAllCourse = async (req, res)=>{
 }
 
 // get course by id 
-export const getCourseId = async (req, res)=> {
-    const {id} = req.params
+export const getCourseId = async (req, res) => {
+    const { id } = req.params;
 
     try {
-        const courseData = await Course.findById(id).populate({path: 'educator'})
+        const courseData = await Course.findById(id).populate({
+            path: "educator",
+        });
 
-        // remove lectureUrl if isPreview is false
-        courseData.courseContent.forEach(chapter => {
-            chapter.chapterContent.forEach(lecture => {
-                if(!lecture.isPreviewFree){
+        // Check if the course exists
+        if (!courseData) {
+            return res.status(404).json({
+                success: false,
+                message: "Course not found",
+            });
+        }
+
+        // Remove lectureUrl if lecture is not free for preview
+        courseData.courseContent.forEach((chapter) => {
+            chapter.chapterContent.forEach((lecture) => {
+                if (!lecture.isPreviewFree) {
                     lecture.lectureUrl = "";
                 }
-            })
-        })
-        res.json({success:true , courseData})
-    } catch (error) {
-        res.json({success: false, message: error.message})
-    }
-}
+            });
+        });
 
+        return res.status(200).json({
+            success: true,
+            courseData,
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};

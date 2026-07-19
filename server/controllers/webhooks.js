@@ -33,7 +33,7 @@ export const clerkWebhooks = async(req , res)=>{
 
             case 'user.updated': {
                 const userData = {
-                    email: data.email_address[0].email_address,
+                    email: data.email_addresses[0].email_address,
                     name: data.first_name + " " + data.last_name,
                     imageUrl: data.image_url,
                 }
@@ -66,7 +66,7 @@ export const stripeWebhooks = async(request,response)=>{
     try {
         event = Stripe.webhooks.constructEvent(request.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
     } catch (err) {
-        response.status(400).send(`Webhook Error: ${err.message}`);
+        return response.status(400).send(`Webhook Error: ${err.message}`);
     }
 
     // handle the event 
