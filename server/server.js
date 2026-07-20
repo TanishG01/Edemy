@@ -16,8 +16,30 @@ const app = express()
 await connectDB()
 await connectCloudinary()
 
+const allowedOrigins = [
+    process.env.FRONTEND_URLS,
+    process.env.FRONTEND_URL,
+    process.env.BACKEND_URLS,
+    process.env.BACKEND_URL,
+    'http://localhost:5173',
+]
+    .filter(Boolean)
+    .flatMap((value) => value.split(','))
+    .map((origin) => origin.trim())
+    .filter(Boolean)
+
 // Middlewares
-app.use(cors())
+app.use(cors({
+    origin: (origin, callback) => {
+        // Allow server-to-server calls (no browser origin header) and configured frontend origins.
+        if (!origin || allowedOrigins.includes(origin)) {
+            return callback(null, true)
+        }
+
+        return callback(new Error('Not allowed by CORS'))
+    },
+    credentials: true,
+}))
 app.use(clerkMiddleware())
 
 // Routes
