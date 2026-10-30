@@ -12,15 +12,12 @@ import userRouter from './routes/userRoutes.js'
 // initialize express 
 const app = express()
 
-// connect to database 
-await connectDB()
-await connectCloudinary()
-
 const allowedOrigins = [
     process.env.FRONTEND_URLS,
     process.env.FRONTEND_URL,
     process.env.BACKEND_URLS,
     process.env.BACKEND_URL,
+    'https://edemy-frontend-chi.vercel.app',
     'http://localhost:5173',
 ]
     .filter(Boolean)
@@ -42,17 +39,43 @@ app.use(cors({
 }))
 app.use(clerkMiddleware())
 
+app.get('/', (req, res) => res.send('API working'))
+
+let databaseConnection
+app.use(async (req, res, next) => {
+    if (!req.path.startsWith('/api/') && req.path !== '/clerk' && req.path !== '/stripe') {
+        return next()
+    }
+
+    try {
+        databaseConnection ??= connectDB()
+        await databaseConnection
+        await connectCloudinary()
+        next()
+    } catch (error) {
+        databaseConnection = undefined
+        next(error)
+    }
+})
+
 // Routes
-app.get('/',(req,res)=> res.send("API working"))
 app.post('/clerk',express.json(),clerkWebhooks)
 app.use('/api/educator',express.json(),educatorRouter)
 app.use('/api/course',express.json(),courseRouter)
 app.use('/api/user', express.json(),userRouter)
 app.post('/stripe', express.raw({type: 'application/json'}),stripeWebhooks)
 
-// Port
-const PORT = process.env.PORT || 4000
-
-app.listen(PORT,()=>{
-    console.log(`Server is running on port ${PORT}`)
+app.use((error, req, res, next) => {
+    console.error(error)
+    res.status(503).json({ message: 'Backend service unavailable' })
 })
+
+// Vercel uses the exported Express app. Keep listen support for local development.
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 4000
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`)
+    })
+}
+
+export default app

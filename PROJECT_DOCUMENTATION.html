@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LMS Project Documentation</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-2: #0b1b2f;
+      --card: rgba(10, 22, 38, 0.82);
+      --card-2: rgba(13, 31, 53, 0.95);
+      --text: #e8eef7;
+      --muted: #a8b6ca;
+      --line: rgba(150, 178, 215, 0.18);
+      --accent: #67e8f9;
+      --accent-2: #60a5fa;
+      --accent-3: #f59e0b;
+      --good: #34d399;
+      --warn: #fbbf24;
+      --danger: #fb7185;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      --radius: 20px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(96, 165, 250, 0.25), transparent 28%),
+        radial-gradient(circle at top right, rgba(103, 232, 249, 0.18), transparent 26%),
+        linear-gradient(180deg, var(--bg) 0%, #091424 38%, #050b14 100%);
+      min-height: 100vh;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .wrap {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 80px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background:
+        linear-gradient(135deg, rgba(18, 35, 58, 0.96), rgba(8, 18, 32, 0.9)),
+        radial-gradient(circle at bottom right, rgba(251, 191, 36, 0.22), transparent 24%);
+      box-shadow: var(--shadow);
+      padding: 32px;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -120px -140px auto;
+      width: 340px;
+      height: 340px;
+      background: radial-gradient(circle, rgba(103, 232, 249, 0.24), transparent 70%);
+      filter: blur(8px);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(103, 232, 249, 0.12);
+      border: 1px solid rgba(103, 232, 249, 0.22);
+      color: #c9f7ff;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    h1, h2, h3, h4 {
+      margin: 0;
+      line-height: 1.15;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 4rem);
+      max-width: 11ch;
+      letter-spacing: -0.04em;
+    }
+
+    .subtitle {
+      margin-top: 16px;
+      max-width: 72ch;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 18px;
+      margin-top: 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-card,
+    .panel,
+    .callout,
+    .qa-card,
+    .mini-card {
+      background: linear-gradient(180deg, var(--card), rgba(6, 14, 24, 0.9));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 22px;
+    }
+
+    .hero-card h3,
+    .panel h2,
+    .callout h2,
+    .qa-card h3,
+    .mini-card h3 {
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+    }
+
+    .list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .list li + li {
+      margin-top: 8px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .stat {
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .stat .label {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .stat .value {
+      margin-top: 8px;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .nav {
+      margin: 22px 0 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .nav a {
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+
+    section {
+      margin-top: 24px;
+    }
+
+    .panel {
+      padding: 24px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .section-title p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 80ch;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .mini-card {
+      padding: 18px;
+    }
+
+    .mini-card p,
+    .qa-card p,
+    .callout p,
+    .panel p,
+    .panel li {
+      color: var(--muted);
+      line-height: 1.72;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font-size: 0.85rem;
+    }
+
+    .tag.good { background: rgba(52, 211, 153, 0.12); border-color: rgba(52, 211, 153, 0.2); }
+    .tag.warn { background: rgba(251, 191, 36, 0.12); border-color: rgba(251, 191, 36, 0.2); }
+    .tag.info { background: rgba(96, 165, 250, 0.12); border-color: rgba(96, 165, 250, 0.2); }
+
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: #d7e6ff;
+      font-size: 0.9rem;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    td {
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .code {
+      margin: 0;
+      padding: 18px;
+      overflow: auto;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #07111e;
+      color: #d8f3ff;
+      line-height: 1.45;
+    }
+
+    .callout {
+      padding: 20px;
+      border-left: 4px solid var(--accent-3);
+    }
+
+    .qa-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .qa-card {
+      padding: 18px;
+    }
+
+    details.qa-card {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    details.qa-card summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 18px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    details.qa-card summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.qa-card summary::after {
+      content: "+";
+      color: var(--accent);
+      font-size: 1.25rem;
+      line-height: 1;
+      flex: 0 0 auto;
+      margin-top: 2px;
+    }
+
+    details.qa-card[open] summary::after {
+      content: "–";
+    }
+
+    details.qa-card .answer-wrap {
+      padding: 0 18px 18px;
+    }
+
+    details.qa-card .q {
+      font-weight: 700;
+      color: #f5fbff;
+      margin-bottom: 10px;
+    }
+
+    details.qa-card .a {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .sequence-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .sequence-grid .mini-card {
+      padding: 22px;
+    }
+
+    .sequence-grid .mermaid {
+      min-height: 360px;
+      padding: 24px;
+    }
+
+    .sequence-grid .mermaid svg {
+      width: 100% !important;
+      height: auto !important;
+      max-width: none !important;
+    }
+
+    .footer-note {
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .small {
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 960px) {
+      .hero-grid,
+      .grid-2,
+      .grid-3,
+      .qa-list {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 22px;
+      }
+    }
+  </style>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      securityLevel: 'loose',
+      themeVariables: {
+        background: '#07111f',
+        primaryColor: '#102238',
+        primaryTextColor: '#e8eef7',
+        primaryBorderColor: '#2b4869',
+        lineColor: '#7dd3fc',
+        secondaryColor: '#0f1d30',
+        tertiaryColor: '#091525'
+      }
+    });
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="eyebrow">LMS Project Documentation</div>
+      <h1>Learning Management System Architecture and Interview Guide</h1>
+      <p class="subtitle">
+        This document summarizes the full project structure of the LMS app in this workspace. It covers the React client, Express API, MongoDB data model, auth and payment flows, file uploads, learning progress, rating logic, deployment assumptions, and interview questions from basic to pressure-test level.
+      </p>
+
+      <div class="nav">
+        <a href="#overview">Overview</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#hld">HLD Diagram</a>
+        <a href="#tech-stack">Tech Stack</a>
+        <a href="#flows">Sequence Diagrams</a>
+        <a href="#data-model">Data Model</a>
+        <a href="#api">API Map</a>
+        <a href="#why">Why These Choices</a>
+        <a href="#interview">Interview Q&A</a>
+      </div>
+
+      <div class="hero-grid">
+        <div class="hero-card">
+          <h3>What the system does</h3>
+          <ul class="list">
+            <li>Students can browse, search, preview, purchase, and track courses.</li>
+            <li>Educators can publish courses, upload thumbnails, and inspect enrollments.</li>
+            <li>Payments are handled through Stripe checkout and Stripe webhooks.</li>
+            <li>Authentication and role metadata are handled through Clerk.</li>
+            <li>Course media is stored on Cloudinary and course content is edited with Quill.</li>
+          </ul>
+          <div class="stats">
+            <div class="stat">
+              <div class="label">Frontend</div>
+              <div class="value">React + Vite</div>
+            </div>
+            <div class="stat">
+              <div class="label">Backend</div>
+              <div class="value">Express + Mongoose</div>
+            </div>
+            <div class="stat">
+              <div class="label">External services</div>
+              <div class="value">Clerk, Stripe, Cloudinary</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <h3>Scope of the doc</h3>
+          <ul class="list">
+            <li>Explains the actual code paths from the project, not a generic LMS template.</li>
+            <li>Documents the client route structure, API endpoints, and database collections.</li>
+            <li>Includes architecture and sequence diagrams in Mermaid syntax.</li>
+            <li>Provides interview questions from beginner to tricky and pressure-focused rounds.</li>
+            <li>Explains why MongoDB, React, Clerk, Stripe, Quill, and Cloudinary fit this app.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag info">Student side</span>
+            <span class="tag good">Educator side</span>
+            <span class="tag warn">Payments</span>
+            <span class="tag info">Progress tracking</span>
+            <span class="tag good">Ratings</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section id="overview" class="panel">
+      <div class="section-title">
+        <div>
+          <h2>1. Project Overview</h2>
+          <p>
+            The app is an LMS platform with two primary roles: student and educator. The student experience centers on discovery, enrollment, playback, progress tracking, and rating. The educator experience centers on creating and publishing courses, seeing enrollments, and reviewing earnings.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="mini-card">
+          <h3>Student journey</h3>
+          <p>
+            A student can browse the home page, search course listings, open course details, preview free lectures, pay through Stripe, watch enrolled lectures in the player, mark lectures as complete, and rate the course after enrollment.
+          </p>
+        </div>
+        <div class="mini-card">
+          <h3>Educator journey</h3>
+          <p>
+            An educator can be promoted by Clerk metadata, create chapters and lectures with a rich-text description, upload a thumbnail, publish the course, and then monitor course count, total earnings, and enrolled students from the dashboard.
+          </p>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top:16px;">
+        <h2>Important implementation note</h2>
+        <p>
+          The backend stores users in MongoDB using the Clerk user id as the document id. That makes the Clerk identity the source of truth for auth while still giving the app local domain data such as enrollments, purchases, ratings, and progress records.
+        </p>
+      </div>
+    </section>
+
+    <section id="architecture" class="panel">
+      <div class="section-title">
+        <div>
+          <h2>2. Full Architecture</h2>
+          <p>
+            The architecture is a classic client-server split: the React SPA talks to an Express API, and the API connects to MongoDB plus third-party services for authentication, payments, and media hosting.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="mini-card">
+          <h3>Frontend responsibilities</h3>
+          <ul class="list">
+            <li>Route rendering with React Router.</li>
+            <li>Global app state through AppContext.</li>
+            <li>Auth session/token retrieval through Clerk React SDK.</li>
+            <li>API calls with axios and user feedback through toast notifications.</li>
+            <li>Course listing, search, playback, enrollment, and educator UI.</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h3>Backend responsibilities</h3>
+          <ul class="list">
+            <li>REST endpoints for course, user, and educator actions.</li>
+            <li>Clerk webhook handling to sync users into MongoDB.</li>
+            <li>Stripe webhook handling to finalize course enrollment.</li>
+            <li>Cloudinary upload for course thumbnails.</li>
+            <li>Mongoose models for course, user, purchase, and progress state.</li>
+          </ul>
+        </div>
+      </div>
+
+      <pre class="mermaid code">flowchart LR
+  Browser[Browser / Student or Educator] --> React[React SPA]
+  React --> Context[AppContext + Router]
+  Context --> API[Express API]
+  API --> DB[(MongoDB)]
+  API --> Clerk[Clerk Auth + Webhooks]
+  API --> Stripe[Stripe Checkout + Webhooks]
+  API --> Cloudinary[Cloudinary Media Storage]
+  React --> YouTube[YouTube Embed Player]
+  React --> Quill[Quill Rich Text Editor]</pre>
+    </section>
+
+    <section id="hld" class="panel">
+      <div class="section-title">
+        <div>
+          <h2>3. High-Level Design (HLD)</h2>
+          <p>
+            This diagram shows the main system layers and how data moves from the browser through the backend to external services and storage.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="mini-card">
+          <h3>Layered view</h3>
+          <ul class="list">
+            <li>Presentation layer: React screens for students and educators.</li>
+            <li>Application layer: context state, route guards, and API call helpers.</li>
+            <li>Service layer: Express controllers, middleware, and webhook handlers.</li>
+            <li>Persistence layer: MongoDB collections for users, courses, purchases, and progress.</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h3>Operational view</h3>
+          <ul class="list">
+            <li>Clerk handles identity and role metadata.</li>
+            <li>Stripe confirms enrollment through webhooks.</li>
+            <li>Cloudinary stores thumbnails outside the app server.</li>
+            <li>Quill generates rich course content for educators.</li>
+          </ul>
+        </div>
+      </div>
+
+      <pre class="mermaid code">flowchart TB
+  subgraph Client[Client Layer]
+    Browser[Browser]
+    SPA[React + Vite SPA]
+    Context[AppContext, Router, State]
+    Browser --> SPA --> Context
+  end
+
+  subgraph API[Application Layer]
+    Routes[Express Routes]
+    Controllers[Controllers]
+    Middleware[Auth, Role, Webhook Middleware]
+    Routes --> Controllers --> Middleware
+  end
+
+  subgraph Data[Data Layer]
+    Mongo[(MongoDB)]
+    User[(User)]
+    Course[(Course)]
+    Purchase[(Purchase)]
+    Progress[(CourseProgress)]
+    Mongo --> User
+    Mongo --> Course
+    Mongo --> Purchase
+    Mongo --> Progress
+  end
+
+  subgraph External[External Services]
+    Clerk[Clerk]
+    Stripe[Stripe]
+    Cloudinary[Cloudinary]
+    Quill[Quill Editor]
+  end
+
+  Context --> Routes
+  Controllers --> Mongo
+  Controllers --> Clerk
+  Controllers --> Stripe
+  Controllers --> Cloudinary
+  SPA --> Quill</pre>
+    </section>
+
+    <section id="tech-stack" class="panel">
+      <div class="section-title">
+        <div>
+          <h2>4. Tech Stack and Why It Fits This Project</h2>
+          <p>
+            Below is the stack used in the project and the practical reason each tool makes sense here.
+          </p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Technology</th>
+              <th>Where it is used</th>
+              <th>Why it is a good fit here</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>React</td>
+              <td>Client-side SPA, route views, reusable components</td>
+              <td>Component composition matches LMS screens well. The app has many repeated UI regions like course cards, navbars, cards, and player panels, so React keeps the UI modular and state-driven.</td>
+            </tr>
+            <tr>
+              <td>Vite</td>
+              <td>Client build and dev server</td>
+              <td>Fast refresh and lightweight dev startup are helpful in a UI-heavy app that changes often while building dashboard and player flows.</td>
+            </tr>
+            <tr>
+              <td>React Router</td>
+              <td>Navigation between home, course list, course detail, player, and educator pages</td>
+              <td>The app has many route-based screens and role-based sections. Nested routing works especially well for the educator area.</td>
+            </tr>
+            <tr>
+              <td>Clerk</td>
+              <td>Authentication, user identity, public metadata roles, tokens</td>
+              <td>Removes the need to build auth from scratch, supports token retrieval for API calls, and stores role metadata for educator access control.</td>
+            </tr>
+            <tr>
+              <td>Node.js</td>
+              <td>Runtime for the backend server and webhook processing</td>
+              <td>Fits a JavaScript-first codebase, handles concurrent I/O well, and is a strong match for request-driven apps that spend time waiting on databases, Stripe, Clerk, or Cloudinary.</td>
+            </tr>
+            <tr>
+              <td>Express</td>
+              <td>REST API server and webhook endpoints</td>
+              <td>Minimal and flexible for implementing course, purchase, webhook, and progress APIs without extra ceremony.</td>
+            </tr>
+            <tr>
+              <td>MongoDB + Mongoose</td>
+              <td>User, Course, Purchase, and CourseProgress collections</td>
+              <td>The course model contains nested chapters and lectures, which maps naturally to document storage. It is easier to evolve than a fixed relational schema for this content-heavy app.</td>
+            </tr>
+            <tr>
+              <td>Stripe</td>
+              <td>Checkout session creation and payment webhooks</td>
+              <td>Provides a secure, ready-made payment flow. Webhooks allow the backend to confidently mark a purchase as completed only after Stripe confirms it.</td>
+            </tr>
+            <tr>
+              <td>Cloudinary</td>
+              <td>Course thumbnail upload</td>
+              <td>Offloads image hosting and delivery from the app server. Good for media assets used in course cards and detail pages.</td>
+            </tr>
+            <tr>
+              <td>Quill</td>
+              <td>Educator course description editor</td>
+              <td>Rich text formatting is required for course descriptions. Quill provides a ready editor for headings, lists, and formatted lesson descriptions.</td>
+            </tr>
+            <tr>
+              <td>Axios</td>
+              <td>API communication</td>
+              <td>Simple request API, easy header handling, and good ergonomics for attaching Clerk bearer tokens.</td>
+            </tr>
+            <tr>
+              <td>Tailwind CSS</td>
+              <td>Utility-first styling</td>
+              <td>Speeds up responsive UI work and keeps the app visually consistent across many small components.</td>
+            </tr>
+            <tr>
+              <td>React Toastify</td>
+              <td>Success and error notifications</td>
+              <td>Useful for user feedback after API calls, form submission, purchase flow, progress updates, and ratings.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout" style="margin-top:16px;">
+        <h2>Major stack deep dive</h2>
+        <p>
+          The table above explains the stack at a practical level. The points below are the deeper interview-style answers for the technologies that matter most in this app.
+        </p>
+      </div>
+
+      <div class="grid-2" style="margin-top:16px;">
+        <div class="mini-card">
+          <h3>React</h3>
+          <p>
+            React fits this project because the UI is built from many reusable pieces that all depend on changing state: course cards, player controls, progress bars, educator forms, navbars, and dashboard widgets. A component model keeps those pieces isolated while still allowing them to share state through context. It is especially useful here because the same course data is rendered differently on the home page, detail page, player page, and educator dashboard. In other words, React matches the shape of the product: lots of screens, repeated patterns, and frequent state updates.
+          </p>
+        </div>
+        <div class="mini-card">
+          <h3>Node.js</h3>
+          <p>
+            Node.js is a strong fit because the backend is mostly I/O bound rather than CPU bound. The server receives requests, validates auth, talks to MongoDB, calls Stripe or Cloudinary, and waits for webhook events. That workload benefits from Node's event-driven runtime and non-blocking I/O model. Another practical advantage is that the frontend and backend both use JavaScript, which lowers context switching for a project like this and makes shared data shapes easier to reason about. For an LMS with many API requests, webhooks, and third-party integrations, Node is a natural runtime choice.
+          </p>
+        </div>
+        <div class="mini-card">
+          <h3>Express</h3>
+          <p>
+            Express keeps the server simple and readable. The backend only needs routing, middleware, JSON handling, auth protection, and webhook endpoints, so a minimal framework is better than something heavy. Express makes it straightforward to split the app by feature into course, user, educator, and webhook routes, and it lets the controllers stay focused on business logic instead of framework ceremony. That is valuable in a project where clarity matters more than a large abstraction layer.
+          </p>
+        </div>
+        <div class="mini-card">
+          <h3>MongoDB + Mongoose</h3>
+          <p>
+            MongoDB fits the data model because the main content object is naturally hierarchical. A course contains chapters, and each chapter contains lectures. That nested structure maps cleanly to a document database and avoids forcing the app into many join tables just to represent one course. Mongoose adds schema discipline on top of MongoDB, which is useful because the project still needs validation, refs, timestamps, and predictable document behavior. For this LMS, MongoDB gives flexibility for evolving course content while Mongoose keeps the schema controlled enough for production-like development.
+          </p>
+        </div>
+        <div class="mini-card">
+          <h3>Clerk</h3>
+          <p>
+            Clerk is a strong fit because authentication is not the product's differentiator. The project needs reliable sign-in, session management, token retrieval, and role metadata, but it does not need to spend engineering time reinventing those pieces. Clerk also reduces risk because the backend can rely on verified identity data instead of hand-rolled auth flows. In interviews, a good way to describe this is: Clerk lets the app focus on course logic and payment logic while outsourcing identity management to a specialized provider.
+          </p>
+        </div>
+        <div class="mini-card">
+          <h3>Stripe</h3>
+          <p>
+            Stripe fits because purchasing a course is a real money flow, and that should not be approximated with custom logic. Stripe handles secure payment collection, checkout UX, and payment verification through webhooks. The important architectural point is that Stripe gives the backend a trustworthy event when payment succeeds, so enrollment can be finalized safely even if the browser session is interrupted. That is exactly the kind of robust behavior expected in an LMS that sells access.
+          </p>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top:16px; border-left-color: var(--good);">
+        <h2>Interview framing for MongoDB vs SQL</h2>
+        <p>
+          I would say MongoDB was chosen because the central entity in this app is a course document with nested chapter and lecture data, and that aggregate is read much more often than it is individually joined across tables. SQL would still work, but it would push the design toward multiple normalized tables and joins for data that is naturally consumed together. In this project, MongoDB reduces modeling friction, keeps the schema flexible while the product evolves, and makes the common read path simpler for both the client and server.
+        </p>
+      </div>
+    </section>
+
+    <section id="flows" class="panel">
+      <div class="section-title">
+        <div>
+          <h2>5. Sequence Diagrams</h2>
+          <p>
+            These diagrams show the highest-value runtime flows in the project. They are intentionally split so each one remains readable and interview-friendly.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-2 sequence-grid">
+        <div class="mini-card">
+          <h3>4.1 User login and application data loading</h3>
+          <pre class="mermaid code">sequenceDiagram
+  autonumber
+  participant User as User
+  participant Navbar as React Navbar
+  participant Clerk as Clerk
+  participant React as React App
+  participant API as Express API
+  participant DB as MongoDB
+
+  User->>Navbar: Click Sign In / Create Account
+  Navbar->>Clerk: openSignIn()
+  Clerk-->>User: Display sign-in form
+  User->>Clerk: Submit credentials
+  Clerk-->>React: Create authenticated session
+  React->>Clerk: getToken()
+  Clerk-->>React: Return bearer token
+  React->>API: GET /api/user/data with Authorization header
+  API->>API: clerkMiddleware resolves req.auth.userId
+  API->>DB: Find User by Clerk user id
+  alt User document exists
+    DB-->>API: Return user profile
+    API-->>React: success: true + user data
+    React-->>User: Render authenticated navigation and account data
+  else User document is missing or request is unauthorized
+    DB-->>API: No matching user
+    API-->>React: success: false or authentication error
+    React-->>User: Show error or sign-in state
+  end</pre>
+        </div>
+
+        <div class="mini-card">
+          <h3>4.2 User sync through Clerk webhook</h3>
+          <pre class="mermaid code">sequenceDiagram
+  autonumber
+  participant Clerk as Clerk
+  participant API as Express API
+  participant DB as MongoDB
+
+  Clerk->>API: user.created / user.updated / user.deleted webhook
+  API->>API: Verify Svix signature
+  alt user.created
+    API->>DB: Create User document with Clerk id
+  else user.updated
+    API->>DB: Update User profile fields
+  else user.deleted
+    API->>DB: Delete User document
+  end
+  API-->>Clerk: 200 OK</pre>
+        </div>
+
+        <div class="mini-card">
+          <h3>4.3 Educator creates a course</h3>
+          <pre class="mermaid code">sequenceDiagram
+  autonumber
+  participant Educator as Educator UI
+  participant React as React App
+  participant API as Express API
+  participant Cloud as Cloudinary
+  participant DB as MongoDB
+
+  Educator->>React: Fill title, description, chapters, lectures, thumbnail
+  React->>API: POST /api/educator/add-course (FormData + token)
+  API->>API: protectEducator checks role in Clerk metadata
+  API->>DB: Create Course document
+  API->>Cloud: Upload thumbnail image
+  Cloud-->>API: secure_url
+  API->>DB: Save thumbnail URL on Course
+  API-->>React: Course Added</pre>
+        </div>
+
+        <div class="mini-card">
+          <h3>4.4 Student purchases a course</h3>
+          <pre class="mermaid code">sequenceDiagram
+  autonumber
+  participant Student as Student UI
+  participant API as Express API
+  participant DB as MongoDB
+  participant Stripe as Stripe Checkout
+
+  Student->>API: POST /api/user/purchase with courseId + token
+  API->>DB: Read User and Course
+  API->>DB: Create Purchase with status=pending
+  API->>Stripe: Create checkout session
+  Stripe-->>Student: Redirect to hosted checkout URL
+  Stripe->>API: payment_intent.succeeded webhook
+  API->>DB: Mark purchase completed
+  API->>DB: Push course into user.enrolledCourses
+  API->>DB: Push user into course.enrolledStudents</pre>
+        </div>
+
+        <div class="mini-card">
+          <h3>4.5 Learning progress and rating</h3>
+          <pre class="mermaid code">sequenceDiagram
+  autonumber
+  participant Player as Player Page
+  participant API as Express API
+  participant DB as MongoDB
+
+  Player->>API: POST /api/user/update-course-progress
+  API->>DB: Upsert CourseProgress and add lectureId
+  API-->>Player: Progress Updated
+  Player->>API: POST /api/user/add-rating
+  API->>DB: Verify enrollment and update/add rating
+  API-->>Player: Rating added successfully</pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="data-model" class="panel">
+      <div class="section-title">
+        <div>
+          <h2>6. Data Model and Schema Behavior</h2>
+          <p>
+            The backend uses four main MongoDB collections. The course document is the richest one because it embeds the learning structure directly inside the record.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="mini-card">
+          <h3>User</h3>
+          <p>
+            Stored with Clerk user id as the MongoDB _id. Holds name, email, imageUrl, and enrolledCourses. The role is not stored here as a normal field; the educator role lives in Clerk public metadata.
+          </p>
+        </div>
+        <div class="mini-card">
+          <h3>Course</h3>
+          <p>
+            Holds title, description, thumbnail, price, discount, educator, published flag, nested courseContent, ratings, and enrolledStudents. This is the main content record used by course browsing and the player.
+          </p>
+        </div>
+        <div class="mini-card">
+          <h3>Purchase</h3>
+          <p>
+            Tracks payment attempts with courseId, userId, amount, and status. It starts as pending and moves to completed or failed based on Stripe webhook confirmation.
+          </p>
+        </div>
+        <div class="mini-card">
+          <h3>CourseProgress</h3>
+          <p>
+            Stores course completion state per student and a lectureCompleted array. The player uses this to show completed lecture ticks and course progress bars.
+          </p>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top:16px;">
+        <h2>Practical data modeling takeaway</h2>
+        <p>
+          Course chapters and lectures are embedded because they are part of a single course aggregate and are usually read together. Purchases and progress are separate collections because they are transactional, user-specific, and queried independently.
+        </p>
+      </div>
+
+      <pre class="mermaid code">erDiagram
+  USER {
+    string _id PK "Clerk user id"
+    string name
+    string email
+    string imageUrl
+    datetime createdAt
+    datetime updatedAt
+  }
+
+  COURSE {
+    objectId _id PK
+    string courseTitle
+    string courseDescription
+    string courseThumbnail
+    number coursePrice
+    boolean isPublished
+    number discount
+    string educator FK "-> USER._id"
+    datetime createdAt
+    datetime updatedAt
+  }
+
+  CHAPTER {
+    string chapterId PK
+    number chapterOrder
+    string chapterTitle
+  }
+
+  LECTURE {
+    string lectureId PK
+    string lectureTitle
+    number lectureDuration
+    string lectureUrl
+    boolean isPreviewFree
+    number lectureOrder
+  }
+
+  COURSE_RATING {
+    string userId FK "-> USER._id"
+    number rating "1..5"
+  }
+
+  PURCHASE {
+    objectId _id PK
+    objectId courseId FK "-> COURSE._id"
+    string userId FK "-> USER._id"
+    number amount
+    string status "pending|completed|failed"
+    datetime createdAt
+    datetime updatedAt
+  }
+
+  COURSE_PROGRESS {
+    objectId _id PK
+    string userId FK "-> USER._id"
+    string courseId FK "logical -> COURSE._id"
+    boolean completed
+  }
+
+  LECTURE_PROGRESS {
+    string lectureId FK "-> LECTURE.lectureId"
+  }
+
+  USER ||--o{ COURSE : creates_as_educator
+  USER }o--o{ COURSE : enrolls_in
+  USER ||--o{ PURCHASE : makes
+  COURSE ||--o{ PURCHASE : is_purchased_via
+  USER ||--o{ COURSE_RATING : gives
+  COURSE ||--o{ COURSE_RATING : receives
+  COURSE ||--o{ CHAPTER : contains
+  CHAPTER ||--o{ LECTURE : contains
+  USER ||--o{ COURSE_PROGRESS : tracks
+  COURSE ||--o{ COURSE_PROGRESS : tracked_by
+  COURSE_PROGRESS ||--o{ LECTURE_PROGRESS : marks_completed</pre>
+    </section>
+
+    <section id="api" class="panel">
+      <div class="section-title">
+        <div>
+          <h2>7. API Map</h2>
+          <p>
+            The endpoints below are the ones used by the current client. They are split by feature boundary, which keeps the route files simple and easy to reason about.
+          </p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Endpoint</th>
+              <th>Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>GET</td>
+              <td>/</td>
+              <td>Health check response: API working.</td>
+            </tr>
+            <tr>
+              <td>POST</td>
+              <td>/clerk</td>
+              <td>Clerk webhook for user created, updated, and deleted events.</td>
+            </tr>
+            <tr>
+              <td>POST</td>
+              <td>/stripe</td>
+              <td>Stripe webhook to finalize payment and enrollment.</td>
+            </tr>
+            <tr>
+              <td>GET</td>
+              <td>/api/course/all</td>
+              <td>Returns published courses without courseContent and enrolledStudents for lighter list views.</td>
+            </tr>
+            <tr>
+              <td>GET</td>
+              <td>/api/course/:id</td>
+              <td>Returns one course with educator data; hides non-preview lecture URLs.</td>
+            </tr>
+            <tr>
+              <td>GET</td>
+              <td>/api/user/data</td>
+              <td>Returns the current logged-in user from MongoDB.</td>
+            </tr>
+            <tr>
+              <td>GET</td>
+              <td>/api/user/enrolled-courses</td>
+              <td>Returns a populated list of enrolled courses for the student.</td>
+            </tr>
+            <tr>
+              <td>POST</td>
+              <td>/api/user/purchase</td>
+              <td>Creates a Stripe checkout session for course purchase.</td>
+            </tr>
+            <tr>
+              <td>POST</td>
+              <td>/api/user/update-course-progress</td>
+              <td>Marks a lecture as completed for the logged-in student.</td>
+            </tr>
+            <tr>
+              <td>POST</td>
+              <td>/api/user/get-course-progress</td>
+              <td>Fetches progress data for a course.</td>
+            </tr>
+            <tr>
+              <td>POST</td>
+              <td>/api/user/add-rating</td>
+              <td>Adds or updates a rating for an enrolled course.</td>
+            </tr>
+            <tr>
+              <td>GET</td>
+              <td>/api/educator/update-role</td>
+              <td>Promotes the current Clerk user to educator in public metadata.</td>
+            </tr>
+            <tr>
+              <td>POST</td>
+              <td>/api/educator/add-course</td>
+              <td>Creates a course with image upload and nested chapters/lectures.</td>
+            </tr>
+            <tr>
+              <td>GET</td>
+              <td>/api/educator/courses</td>
+              <td>Returns all courses owned by the current educator.</td>
+            </tr>
+            <tr>
+              <td>GET</td>
+              <td>/api/educator/dashboard</td>
+              <td>Returns total earnings, total courses, and recent enrollment data.</td>
+            </tr>
+            <tr>
+              <td>GET</td>
+              <td>/api/educator/enrolled-students</td>
+              <td>Returns student enrollment records for educator reporting.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="why" class="panel">
+      <div class="section-title">
+        <div>
+          <h2>8. Why These Choices Were Made</h2>
+          <p>
+            These are the interview-ready explanations for the main design choices in this codebase.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="mini-card">
+          <h3>Why MongoDB instead of SQL?</h3>
+          <p>
+            The course document contains nested chapters and lecture arrays, plus ratings and metadata that are tightly coupled to one course. MongoDB fits that shape naturally, so one course record can hold the full learning structure without lots of join tables. It also lets the schema evolve quickly while the product is being iterated.
+          </p>
+        </div>
+        <div class="mini-card">
+          <h3>Why React?</h3>
+          <p>
+            This UI is made of many reusable and stateful pieces: route pages, cards, player controls, progress bars, expandable chapter lists, and educator forms. React makes that decomposition clean and manageable, especially when combined with a context provider for shared data.
+          </p>
+        </div>
+        <div class="mini-card">
+          <h3>Why Clerk?</h3>
+          <p>
+            Clerk offloads auth, session handling, user identity, and role metadata. The project needs authenticated API access and educator access control, so Clerk reduces custom auth code while still exposing tokens to the frontend and webhooks to sync users.
+          </p>
+        </div>
+        <div class="mini-card">
+          <h3>Why Stripe?</h3>
+          <p>
+            Payment processing should not be hand-built. Stripe gives a secure checkout experience, payment intent state management, and webhooks that let the backend mark enrollment as completed only when the transaction is confirmed.
+          </p>
+        </div>
+        <div class="mini-card">
+          <h3>Why Cloudinary?</h3>
+          <p>
+            Educators need to upload thumbnails. Cloudinary keeps image storage and delivery separate from the API server, which improves scalability and simplifies media handling.
+          </p>
+        </div>
+        <div class="mini-card">
+          <h3>Why Quill?</h3>
+          <p>
+            Course descriptions are rich-text content, not plain text. Quill lets educators format headings, lists, and body text while preserving HTML that can be rendered back on the course detail page.
+          </p>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top:16px;">
+        <h2>Design tradeoff to mention in interviews</h2>
+        <p>
+          This project chooses embedded course content for read-heavy performance and ease of editing, but keeps purchases and progress separate to avoid mixing transactional data into the content record. That balance is a practical domain-driven choice, not an accident.
+        </p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">
+        <div>
+          <h2>9. Frontend and Backend Folder Map</h2>
+          <p>
+            These are the main code zones and what they do in the current workspace.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="mini-card">
+          <h3>Client</h3>
+          <p><strong>src/App.jsx</strong> routes student and educator screens.</p>
+          <p><strong>src/context/AppContext.jsx</strong> stores app-wide API helpers, course calculations, and user state.</p>
+          <p><strong>src/pages/student</strong> contains home, listing, detail, enrollments, and player views.</p>
+          <p><strong>src/pages/educator</strong> contains dashboard, add course, courses, and students enrolled views.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Server</h3>
+          <p><strong>server.js</strong> initializes Express, CORS, Clerk middleware, and routes.</p>
+          <p><strong>controllers</strong> contain user, educator, course, and webhook logic.</p>
+          <p><strong>models</strong> define User, Course, Purchase, and CourseProgress schemas.</p>
+          <p><strong>configs</strong> connect MongoDB, Cloudinary, and Multer.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="interview" class="panel">
+      <div class="section-title">
+        <div>
+          <h2>10. Interview Questions and Answers</h2>
+          <p>
+            Use these as a project-focused prep guide. The answers are written in a way that is realistic for a technical interview rather than academic theory only.
+          </p>
+        </div>
+      </div>
+
+      <h3 style="margin-bottom:12px;">Basic</h3>
+      <div class="qa-list">
+        <details class="qa-card">
+          <summary><div class="q">1. What is the main goal of this project?</div></summary>
+          <div class="answer-wrap"><div class="a">It is a full LMS where educators create and publish courses, and students browse, purchase, watch, and track learning progress. The important part is that the system handles the full loop, from course creation to enrollment confirmation and progress tracking, instead of only showing static content. In an interview, I would describe it as a small but realistic marketplace plus learning platform with separate user roles and payment-backed access control.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">2. Why did you split the app into student and educator areas?</div></summary>
+          <div class="answer-wrap"><div class="a">Because the two roles have different tasks, screens, and permissions. Students need discovery, purchase, playback, progress, and ratings, while educators need course creation, upload workflows, and dashboard-style reporting. Splitting them keeps the UI clean and also makes the backend authorization rules easier to enforce because each route can be tied to a role boundary.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">3. What does AppContext do?</div></summary>
+          <div class="answer-wrap"><div class="a">It acts as the shared client-side coordination layer. It centralizes course fetching, derived calculations like duration and ratings, enrollment checks, and auth token handling so that multiple pages do not duplicate the same logic. The practical reason is maintainability: when an API shape changes, one context update can feed the whole app instead of updating each page individually.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">4. Why do you use Clerk?</div></summary>
+          <div class="answer-wrap"><div class="a">Clerk removes a lot of authentication plumbing from the project. It gives sign-in, sessions, user identity, and metadata-based roles, which is enough for this LMS because the app only needs to know who the user is and whether they are a student or educator. That lets the project focus on product logic like courses and payments instead of building auth from zero.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">5. Why is the course description stored as HTML?</div></summary>
+          <div class="answer-wrap"><div class="a">Because the educator uses Quill, which is a rich-text editor, not plain text input. Storing the formatted HTML means the course description can preserve headings, lists, emphasis, and structure when it is rendered on the course detail page. The tradeoff is that HTML must be handled carefully, but for an editor-driven course page this is the natural format.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">6. What triggers enrollment completion?</div></summary>
+          <div class="answer-wrap"><div class="a">Stripe webhook confirmation is the source of truth. The frontend may create the checkout session, but the backend only marks the purchase as complete after Stripe notifies it that payment succeeded. That design protects the system from browser interruptions, accidental redirects, or users closing the checkout page before the payment flow is finalized.</div></div>
+        </details>
+      </div>
+
+      <h3 style="margin:24px 0 12px;">Advanced</h3>
+      <div class="qa-list">
+        <details class="qa-card">
+          <summary><div class="q">1. Why is courseContent embedded inside Course instead of normalized into separate collections?</div></summary>
+          <div class="answer-wrap"><div class="a">Because the course content is usually consumed as one aggregate. When a student opens a course detail page or starts the player, the chapters and lectures are needed together, so embedding reduces extra queries and avoids join-heavy reads. It also matches the product model: a course is the root object, and chapters and lectures are just parts of that course, not independent business entities.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">2. How do you prevent unauthorized educator actions?</div></summary>
+          <div class="answer-wrap"><div class="a">The server enforces role checks, not the frontend. Clerk authenticates the user, and the backend middleware checks whether the user has the educator role in public metadata before allowing educator-only endpoints. That matters because frontend state can be changed in the browser, but server-side authorization cannot be bypassed just by editing client code.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">3. Why do you need both Clerk webhooks and Stripe webhooks?</div></summary>
+          <div class="answer-wrap"><div class="a">They solve different synchronization problems. Clerk webhooks keep the app's user table in sync with the identity provider, which is needed when users are created, updated, or deleted. Stripe webhooks finalize payment state and enrollments, which is a separate transactional workflow. Using both means the system always relies on the provider's server-to-server confirmation instead of trusting a browser redirect.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">4. How is course progress modeled?</div></summary>
+          <div class="answer-wrap"><div class="a">Progress is stored in a separate CourseProgress collection with a user-course pair and a list of completed lectures. That keeps progress isolated from the course catalog, which is important because every student progresses differently. If progress were stored inside the course document, one popular course could become a write hotspot and the course record would keep changing for every student action.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">5. How do you make course list pages lighter?</div></summary>
+          <div class="answer-wrap"><div class="a">The list endpoint intentionally returns only the fields needed for discovery views. It omits courseContent and enrolledStudents because those are expensive and unnecessary for cards, search, and preview grids. That reduces payload size, speeds up rendering, and makes the browsing experience feel faster on slower connections.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">6. Why is the user _id a string?</div></summary>
+          <div class="answer-wrap"><div class="a">Because it directly matches the Clerk user id, which means the auth identity and the application identity are the same value. That simplifies lookups, webhook sync, enrollment ownership checks, and API authorization because the system does not need an extra mapping layer between auth users and app users.</div></div>
+        </details>
+      </div>
+
+      <h3 style="margin:24px 0 12px;">Tricky and Pressure-Test</h3>
+      <div class="qa-list">
+        <details class="qa-card">
+          <summary><div class="q">1. What happens if the user closes the checkout tab before Stripe finishes?</div></summary>
+          <div class="answer-wrap"><div class="a">The purchase remains pending until the webhook arrives, so the browser closing does not create a bad final state. This is exactly why the backend does not rely on redirect URLs to confirm payment. In a pressure interview, I would emphasize that the system is resilient because the state transition happens on the server, not in the client session.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">2. How do you prevent someone from adding a rating without buying the course?</div></summary>
+          <div class="answer-wrap"><div class="a">The backend checks ownership before accepting the rating. It verifies that the user exists, the course exists, and the course id is present in the user's enrolledCourses list. So even if someone manually calls the endpoint, the server still rejects the request unless enrollment already exists.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">3. If the same lecture is marked complete twice, what happens?</div></summary>
+          <div class="answer-wrap"><div class="a">The controller checks whether the lecture id already exists in the completion list and returns early if it does. That prevents duplicate progress entries and keeps the completion count accurate. It is a simple form of idempotency, which is a good interview point because it shows the API can handle repeated requests safely.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">4. Why not trust the frontend for the educator role?</div></summary>
+          <div class="answer-wrap"><div class="a">Because the frontend is only presentation logic and can be modified by anyone in the browser. A malicious user can alter state, call hidden functions, or send requests directly with a tool like Postman. The role must be validated on the server against Clerk metadata so that permission checks remain authoritative and not cosmetic.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">5. How would you handle scaling if there are thousands of lectures per course?</div></summary>
+          <div class="answer-wrap"><div class="a">I would revisit the data model and likely split very large lecture catalogs into a separate collection or paginated subdocuments. At that scale, the current embedded design might become too large to fetch efficiently. I would also consider lazy loading lectures, server-side pagination, and caching common course summary data so the client does not load everything at once.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">6. What is the riskiest assumption in the current design?</div></summary>
+          <div class="answer-wrap"><div class="a">The biggest assumption is that webhook processing will be reliable and idempotent. If Stripe retries an event or a webhook arrives late, the backend must not create duplicate purchases or double-enroll a user. That is why signature verification, transaction-safe updates, and duplicate checks are so important in this type of system.</div></div>
+        </details>
+      </div>
+
+      <h3 style="margin:24px 0 12px;">Deep-Dive Follow-ups</h3>
+      <div class="qa-list">
+        <details class="qa-card">
+          <summary><div class="q">1. Why do you compute course duration on the client instead of storing it?</div></summary>
+          <div class="answer-wrap"><div class="a">Because duration is a derived value from lecture metadata, not a primary piece of business data. If the lecture list changes, the duration should naturally change too, so computing it from the source of truth avoids stale cached values. Only when scale or repeated rendering makes it expensive would I persist a computed value on the server.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">2. Why is the player page separate from the course detail page?</div></summary>
+          <div class="answer-wrap"><div class="a">The detail page is for discovery and purchase decision-making, while the player page is for active learning. Those two modes need different UI, permissions, and data behavior. The player page focuses on lecture playback, completion state, and progress updates, whereas the detail page focuses on course description, previews, pricing, and enrollment prompts.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">3. Why use webhooks rather than direct success redirect logic for enrollment?</div></summary>
+          <div class="answer-wrap"><div class="a">Redirects are not a reliable proof of payment because the browser can fail, close, or be manipulated. Webhooks are sent server-to-server by Stripe, so they are much closer to a trusted source of truth. That design gives you correctness first and makes enrollment state independent of the user's browser session.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">4. How would you test the purchase flow?</div></summary>
+          <div class="answer-wrap"><div class="a">I would test it in layers. First I would validate checkout session creation and webhook signature checks. Then I would verify that a successful webhook updates the purchase status, enrolls the user, and updates the course enrollment list. Finally I would confirm the student-facing course list and player page reflect the new access correctly after the webhook path completes.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">5. What is the biggest performance win in the current code?</div></summary>
+          <div class="answer-wrap"><div class="a">The biggest win is keeping the common read path cheap. The course list endpoint returns lightweight data instead of full nested lecture content, which keeps browsing fast. The second win is using one embedded course document for the content tree, which avoids multiple round trips when the player or course detail page needs the full structure.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">6. What would you improve next?</div></summary>
+          <div class="answer-wrap"><div class="a">I would harden webhook idempotency, add more schema validation for course creation, and improve error reporting for failed uploads or payment edge cases. If the data grows, I would also consider caching derived fields like duration or rating averages on the server. That would make the app more production-like while keeping the current architecture mostly intact.</div></div>
+        </details>
+      </div>
+
+      <h3 style="margin:24px 0 12px;">Senior / Scenario-Based</h3>
+      <div class="qa-list">
+        <details class="qa-card">
+          <summary><div class="q">1. Why did you use React Context instead of Redux for this project?</div></summary>
+          <div class="answer-wrap"><div class="a">The app needs shared state, but it does not need a large global event system or complex reducer orchestration. React Context is enough for the current scale because it can share auth-aware helpers, course data, and computed values across pages without adding extra boilerplate. If the project later grows into a much larger app with deeply interdependent state updates, I would consider Redux or another state library. For this LMS, Context is simpler, faster to set up, and easier to explain in an interview because it stays close to the component tree.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">2. How do you handle derived values like discounted price, total rating, or course duration?</div></summary>
+          <div class="answer-wrap"><div class="a">Derived values should come from the source of truth whenever possible. Discounted price can be calculated from price and discount, rating can be computed from the stored ratings array, and duration can be derived from lecture metadata. That keeps the data model cleaner and avoids stale copies of the same fact. If traffic or repeated rendering becomes expensive, those values can later be cached on the server, but the default approach in this project is to calculate them as needed so the system stays simpler and less error-prone.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">3. Why are webhooks better than polling for payment and auth sync?</div></summary>
+          <div class="answer-wrap"><div class="a">Webhooks are event-driven and server-to-server, which means the provider tells your backend when something actually happened. Polling would require the app to keep asking Stripe or Clerk whether a change occurred, which is slower, wasteful, and less reliable under load. For this LMS, webhook-driven flow is a better fit because payment completion and user sync are discrete events. It also means the backend can update the database immediately when the authoritative service confirms the event.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">4. How would you prevent duplicate checkout sessions or duplicate enrollments?</div></summary>
+          <div class="answer-wrap"><div class="a">I would treat purchase creation and purchase completion as separate states and enforce idempotency at both stages. When creating a checkout session, the backend can check whether a pending purchase already exists for the same user and course before creating another one. When handling the webhook, the backend should verify whether the purchase was already completed and skip duplicate writes if it was. That keeps the system safe even if Stripe retries an event or the user submits the purchase action twice.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">5. What if the thumbnail upload succeeds but the database update fails, or vice versa?</div></summary>
+          <div class="answer-wrap"><div class="a">That is a classic consistency problem in systems that touch both storage and a database. The best answer is to minimize partial failure by ordering steps carefully and handling cleanup on failure. For example, if the database write fails after a successful Cloudinary upload, the backend should either roll back the uploaded asset or mark the course creation as incomplete and retry safely. If the DB write succeeds but the upload fails, the course should not be published until the asset is available. In an interview, I would say this flow should be made transactional at the application level because it spans two systems that do not share a database transaction.</div></div>
+        </details>
+        <details class="qa-card">
+          <summary><div class="q">6. What would you improve before production deployment?</div></summary>
+          <div class="answer-wrap"><div class="a">I would tighten validation on all write endpoints, add stronger error boundaries and loading states in the frontend, and harden webhook idempotency. I would also add monitoring for payment and upload failures, rate-limit sensitive endpoints, and ensure environment variables are managed securely. On the data side, I would review indexes for common queries like published courses, enrolled courses, and educator course lists. That would make the system more production-ready without changing the overall design.</div></div>
+        </details>
+      </div>
+
+      <p class="footer-note">
+        If you want, I can also turn this into a prettier printable version, add screenshots of the actual UI, or generate a separate interview-cheat-sheet PDF-style HTML page from the same codebase.
+      </p>
+    </section>
+  </div>
+</body>
+</html>
